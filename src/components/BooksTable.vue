@@ -39,7 +39,15 @@ export default {
     },
     data() {
         return {
-            isEdit: false
+            submitting: false,
+            error: false,
+            success: false,
+            isEdit: false,
+            editedBook: {
+                authors: [],
+                title: '',
+                pages: '',
+            },
         }
     },
     methods: {
@@ -57,6 +65,10 @@ export default {
                 $btn1.attr('class', 'btn btn-info btn-sm')
                 $btn2.html('Usuń')
             }
+        },
+        clearStatus() {
+            this.success = false
+            this.error = false
         },
 
         handleDelete(id) {
@@ -85,7 +97,7 @@ export default {
             var $title = $grandParent.children().eq(1)
             var $pages = $grandParent.children().eq(2)
 
-            this.changeButtons($grandParent)
+            
 
             if (this.isEdit)
             {
@@ -117,17 +129,48 @@ export default {
             }
             else
             {
-                $('.btn-danger').prop('disabled', false);
-                $('.btn-info').prop('disabled', false);
-                var $editedBook = {
+                this.submitting = true
+                this.clearStatus()
+
+                
+                this.editedBook = {
                     id: $book.id,
                     authors: $author.children().val(),
                     title: $title.children().val(),
                     pages: $pages.children().val()
                 }
 
-                this.$emit('edit:book', $editedBook)
+                if (this.invalidAuthor || this.invalidTitle || this.invalidPages) {
+                    this.error = true
+                    this.isEdit = !this.isEdit
+
+                    return
+                }
+
+                $('.btn-danger').prop('disabled', false);
+                $('.btn-info').prop('disabled', false);
+
+                this.$emit('edit:book', this.editedBook)
+
+                this.error = false
+                this.success = true
+                this.submitting = false
             } 
+
+            this.changeButtons($grandParent)
+        }
+    },
+    computed: {
+        invalidAuthor() {
+            return this.editedBook.authors === []
+        },
+
+        invalidTitle() {
+            return this.editedBook.title === ''
+        },
+
+        invalidPages() {
+            return this.editedBook.pages === ''
         }
     }
 }
