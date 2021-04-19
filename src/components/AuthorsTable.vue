@@ -36,12 +36,9 @@
                                     <td>{{ book.pages}}</td>
                                 </tr>
                             </tbody>
-
                         </table> 
-
                     </td>
                 </tr>
-
             </tbody>
         </table>
     </div>
@@ -99,6 +96,7 @@ export default {
         handleDelete(id) {
             if (this.isEdit)
             {
+                // usuń/anuluj button
                 location.reload();
             }
             else
@@ -111,6 +109,7 @@ export default {
 
             this.isEdit = !this.isEdit
             
+            // get author
             var $authorId = parseInt(event.target.id)
             var $authorIndex = this.authorsSource.map(function(author) { 
                 return author.id;
@@ -127,9 +126,11 @@ export default {
             if (this.isEdit)
             {
 
+                // disable buttons 
                 $('.btn-danger').not($grandParent.children().eq(3).children().eq(1)).prop('disabled', true);
                 $('.btn-info').not($grandParent.children().eq(3).children().eq(0)).prop('disabled', true);
 
+                // change controls -> form
                 $firstName.html(function() {
                     return '<input class="form-control" :class="{ "error": invalidFirstName}"/>'
                 })
@@ -140,13 +141,15 @@ export default {
                     return '<select multiple class="form-control" id="book-form" v-model="author.books" type="number" options="booksSource"></select>'
                 })
 
+                // options to multiple select
                 $.each(this.booksSource, function (i, item) {
                     $books.children().append($('<option>', { 
                         value: item.id,
                         text : item.title 
                     }));
-
                 });
+
+                // select values that author has
                 $books.children().val($author.books.map(function(b) { 
                     return b.id;
                 }))
@@ -159,11 +162,7 @@ export default {
                 this.submitting = true
                 this.clearStatus()
 
-                //check from fields
-               
-
-
-                
+                // take values
                 this.editedAuthor = {
                     id: $author.id,
                     books: $books.children().val(),
@@ -178,6 +177,7 @@ export default {
                     return
                 }
                 
+                // enable buttons
                 $('.btn-danger').prop('disabled', false);
                 $('.btn-info').prop('disabled', false);
 

@@ -50,10 +50,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
-      this.getAuthors() //?
-      // this.setName(book)
-      // this.books.push(book)
-
+      this.getAuthors()
     },
 
     deleteAuthor(id) {
@@ -87,20 +84,7 @@ export default {
       location.reload();
     },
 
-    setName(book) {
-      var auth = []
-      book.authors.forEach((a) => {
-        this.authors.forEach((au)=>{
-          if (au.id === a)
-            auth.push({
-              id : au.id, 
-              firstName : au.firstName, 
-              lastName : au.lastName
-            })
-        }) 
-      })
-      book.authors = auth
-    },
+    // for each book in author: [id] -> [{id, title, pages}]
     setBooks(author) {
       var vbooks = []
       author.books.forEach((b) => {
@@ -124,9 +108,7 @@ export default {
         const data2 = await response2.json()
 
         this.books = data
-        this.books.forEach((e)=> {
-          this.setName(e)
-        })
+
         this.authors = data2
         this.authors.forEach((e)=> {
           this.setBooks(e)

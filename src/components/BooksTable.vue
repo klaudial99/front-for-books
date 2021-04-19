@@ -14,7 +14,7 @@
                 <tr v-for="book in booksSource" :key="book.id">
                     <td >
                         <span v-for="author in book.authors" :key="author.id">
-                            <pre>{{ author.firstName + ' ' + author.lastName + '' }}</pre>
+                            <pre>{{ author.firstName + ' ' + author.lastName }}</pre>
                         </span>
                     </td>
                     <td>{{ book.title }}</td>
@@ -74,6 +74,7 @@ export default {
         handleDelete(id) {
             if (this.isEdit)
             {
+                // usuń/anuluj button
                 location.reload();
             }
             else
@@ -86,13 +87,14 @@ export default {
 
             this.isEdit = !this.isEdit
             
+            // get book
             var $bookId = parseInt(event.target.id)
             var $bookIndex = this.booksSource.map(function(book) { 
                 return book.id;
             }).indexOf($bookId);
             var $book = this.booksSource[$bookIndex]
 
-            var $grandParent = $('#'+$bookId).parent().parent();
+            var $grandParent = $('#'+$bookId).parent().parent(); //row
             var $author = $grandParent.children().eq(0)
             var $title = $grandParent.children().eq(1)
             var $pages = $grandParent.children().eq(2)
@@ -102,8 +104,11 @@ export default {
             if (this.isEdit)
             {
 
+                // disable buttons 
                 $('.btn-danger').not($grandParent.children().eq(3).children().eq(1)).prop('disabled', true);
                 $('.btn-info').not($grandParent.children().eq(3).children().eq(0)).prop('disabled', true);
+
+                // change controls -> form
                 $author.html(function() {
                     return '<select multiple class="form-control" id="author-form" v-model="book.authors" type="number" options="authorsSource"></select>'
                 })
@@ -114,13 +119,15 @@ export default {
                     return '<input class="form-control"/>'
                 })
 
+                // options to multiple select
                 $.each(this.authorsSource, function (i, item) {
                     $author.children().append($('<option>', { 
                         value: item.id,
                         text : item.firstName + ' ' + item.lastName 
                     }));
-
                 });
+
+                // select values that book has
                 $author.children().val($book.authors.map(function(a) { 
                     return a.id;
                 }))
@@ -132,7 +139,7 @@ export default {
                 this.submitting = true
                 this.clearStatus()
 
-                
+                // take values
                 this.editedBook = {
                     id: $book.id,
                     authors: $author.children().val(),
@@ -147,6 +154,7 @@ export default {
                     return
                 }
 
+                // enable buttons
                 $('.btn-danger').prop('disabled', false);
                 $('.btn-info').prop('disabled', false);
 

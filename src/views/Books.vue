@@ -39,7 +39,6 @@ export default {
   },
   methods: {
     addBook(book) {
-      //this.books = [...this.books, book]
       try {
         fetch('http://localhost:9000/book', {
           method: 'POST',
@@ -52,9 +51,6 @@ export default {
         console.log(error)
       }
       this.getBooks()
-      // this.setName(book)
-      // this.books.push(book)
-
     },
 
     deleteBook(id) {
@@ -88,6 +84,7 @@ export default {
       location.reload();
     },
 
+    // for each book: [id] -> [{id, first, last}]
     setName(book) {
       var auth = []
       book.authors.forEach((a) => {

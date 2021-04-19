@@ -11,7 +11,7 @@
                             type="text"
                             class="form-control"
                             id="firstName_form"
-                            :class="{ 'has-error': submitting && invalidTitle}"
+                            :class="{ 'has-error': submitting && invalidFirstName}"
                             @focus="clearStatus"
                             @keypress="clearStatus" 
                         />
@@ -24,7 +24,7 @@
                             type="text"
                             class="form-control"
                             id="lastName_form"
-                            :class="{ 'has-error': submitting && invalidPages}"
+                            :class="{ 'has-error': submitting && invalidLasName}"
                             @focus="clearStatus"
                             @keypress="clearStatus" 
                         />
@@ -42,7 +42,6 @@
                             v-model="author.books" 
                             type="number"
                             options="booksSource"
-                            :class="{ 'has-error': submitting && invalidAuthor}"
                             @focus="clearStatus"
                             @keypress="clearStatus"
                         >
@@ -104,7 +103,7 @@ export default {
             this.author.books = $('#book-form').val().map(Number)
             this.$emit('add:author', this.author)
 
-            this.bauthorook = {
+            this.author = {
                 books: [],
                 firstName: '',
                 lastName: '',
